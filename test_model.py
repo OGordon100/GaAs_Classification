@@ -61,10 +61,14 @@ def plot_model_history(model):
 
 
 def assert_onehot(y):
-    if np.array(y).ndim != 2:
+    if np.array(y).ndim == 1:
         y = to_categorical(y)
     return y
 
+def assert_indices(y):
+    if np.array(y).ndim == 2:
+        y = np.argmax(y, axis=1)
+    return y
 
 def ROC_one_vs_all(y_preds, y_truth, cats):
     fpr = {}
@@ -119,3 +123,30 @@ def PR_one_vs_all(y_preds, y_truth, cats):
     plt.legend()
 
     return recall, prec, tholds, pr_auc
+
+
+def test_classifier(y_preds, y_truth, cats=None, average="weighted"):
+    y_preds = assert_onehot(y_preds)
+    y_truth = assert_onehot(y_truth)
+    y_pred_arg = assert_indices(y_preds)
+    y_true_arg = assert_indices(y_truth)
+
+    if not cats:
+        cats = np.arange(y_pred_arg.max())
+
+    performance = {}
+    performance_funcs = [metrics.accuracy_score, metrics.balanced_accuracy_score, metrics.confusion_matrix,
+                         metrics.hamming_loss, metrics.matthews_corrcoef]
+    weighted_performance_funcs = [metrics.f1_score, metrics.precision_score,
+                                  metrics.recall_score, metrics.jaccard_score]
+
+    for func in performance_funcs:
+        performance[func.__name__] = func(y_pred=y_pred_arg, y_true=y_true_arg)
+    for func in weighted_performance_funcs:
+        performance[f"{func.__name__}_{average}"] = func(y_pred=y_pred_arg, y_true=y_true_arg, average=average)
+
+    ROC_one_vs_all(y_preds=y_preds, y_truth=y_truth, cats=cats)
+    PR_one_vs_all(y_preds=y_preds, y_truth=y_truth, cats=cats)
+    confusion_matrix(y_pred=y_pred_arg, y_truth=y_true_arg, cats=cats)
+
+    return performance
