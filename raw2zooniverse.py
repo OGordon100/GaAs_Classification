@@ -31,5 +31,5 @@ for file, orientation in tqdm(zip(filenames, orientations), total=len(filenames)
         im = (im - im.min()) / (im.max() - im.min())
 
         # Save
-        im2 = Image.fromarray(np.uint8(nanomap(im)*255))
-        im2.save(f"{OUTPUT_DIR}/{file}_{o}.png")
+        im_PIL = Image.fromarray(np.uint8(nanomap(im)*255))
+        im_PIL.save(f"{OUTPUT_DIR}/{file}_{o}.png")
