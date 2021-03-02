@@ -3,8 +3,7 @@ import itertools
 import numpy as np
 from matplotlib import pyplot as plt
 from sklearn import metrics
-from tensorflow_core.python.keras.utils import to_categorical
-
+from tensorflow.keras.utils import to_categorical
 
 def confusion_matrix(y_truth, y_pred, cats, cmap=None, normalize=True, title=None):
     cm = metrics.confusion_matrix(y_truth, y_pred)

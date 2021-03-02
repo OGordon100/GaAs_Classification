@@ -1,12 +1,12 @@
 import h5py
 import numpy as np
+import tensorflow as tf
 from matplotlib import pyplot as plt
 from nOmicron.utils.plotting import nanomap
 from sklearn.utils import class_weight
-import tensorflow as tf
 from tensorflow.keras.utils import Sequence
-from tensorflow_core.python.keras import Sequential
-from tensorflow_core.python.keras.utils import to_categorical
+from tensorflow.keras import Sequential
+from tensorflow.keras.utils import to_categorical
 
 
 class DataGenerator(Sequence):
@@ -60,9 +60,8 @@ class DataGenerator(Sequence):
 
     def subsample(self, batch_x):
         rand_inds = (np.random.rand(2) * (np.shape(batch_x)[2] - self.output_size)).astype(int)
-        return batch_x[:,
-               rand_inds[0]:rand_inds[0] + self.output_size,
-               rand_inds[1]:rand_inds[1] + self.output_size, :]
+        return batch_x[:, rand_inds[0]: (rand_inds[0] + self.output_size),
+               rand_inds[1]: (rand_inds[1] + self.output_size), :]
 
     @staticmethod
     def flip(batch_x):
