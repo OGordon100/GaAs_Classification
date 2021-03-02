@@ -65,10 +65,12 @@ def assert_onehot(y):
         y = to_categorical(y)
     return y
 
+
 def assert_indices(y):
     if np.array(y).ndim == 2:
         y = np.argmax(y, axis=1)
     return y
+
 
 def ROC_one_vs_all(y_preds, y_truth, cats):
     fpr = {}

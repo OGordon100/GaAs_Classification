@@ -33,3 +33,5 @@ for file, orientation in tqdm(zip(filenames, orientations), total=len(filenames)
         # Save
         im_PIL = Image.fromarray(np.uint8(nanomap(im)*255))
         im_PIL.save(f"{OUTPUT_DIR}/{file}_{o}.png")
+
+# Python API for zooniverse???? https://github.com/zooniverse/panoptes-python-client
